@@ -1,46 +1,49 @@
-let osc;
+let abby = {
+  x:0,
+  y:0,
+  img: null
+};
 
+let osc1, osc2 
 
-function setup(){
-  let cnv = createCanvas(100,100);
-  cnv.mouseClicked(togglePlay);
-  fft = new p5.FFT(32);
-  osc = new p5.TriOsc(440);
-  osc.connect(fft);
+let freq = 220; 
+let freqMod = 0;
+
+function preload(){
+  abby.img = loadImage('images/abbyleemiller.jpg'); 
 }
 
-function draw(){
-  background(220);
-  let spectrum = fft.analyze();
-  noStroke();
-  fill(255, 0, 0);
+function setup() {
+  createCanvas(windowWidth, windowHeight); 
+  abby.img.resize(120,120)
+  osc1 = new p5.Oscillator('triangle')
+  osc2 = new p5.Oscillator('triangle')
+  
+  osc1.start()
+  osc2.start()
 
-  for (let i = 0; i < spectrum.length; i++) {
-    let x = map(i, 0, spectrum.length, 0, width);     
-    let h = -height + map(spectrum[i], 0, 0.1, height, 0);
-    rect(x, height, width / spectrum.length, h )
+
+  osc1.amp(0)
+  osc2.amp(0)
+}
+
+
+function draw() {
+  
+background(0,0,0); 
+
+  
+  abby.x = noise(frameCount/100)*width
+  abby.y = noise(frameCount/100+100)*height
+  
+  image(abby.img,abby.x,abby.y)
+  
+  freqMod = map(abby.x, 0,abby.y, -15,15)
+  
+  osc1.freq(freq)
+  osc2.freq(freq + freqMod)
+  osc1.amp(0.5)
+  osc2.amp(0.5)
+ 
   }
-
-  let waveform = fft.waveform();
   
-  noFill();
-  
-  beginShape();
-  stroke(20);
-  
-  for (let i = 0; i < waveform.length; i++){
-    let x = map(i, 0, waveform.length, 0, width);
-    let y = map( waveform[i], -1, 1, 0, height);
-    vertex(x,y);
-  }
-  endShape();
-  
-  textAlign(CENTER);
-  text('tap to play', width/2, 20);
-  osc.freq(map(mouseX, 0, width, 100, 2000));
-  describe('The sketch displays the frequency spectrum and waveform of the sound that plays.');
-}
-
-function togglePlay() {
-  osc.start();
-}
