@@ -1,0 +1,11 @@
+#main {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    height:100vh;
+}
+
+html, body {
+  margin: 100;
+  padding: 100;
+}
