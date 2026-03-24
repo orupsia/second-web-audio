@@ -25,8 +25,7 @@ function setup() {
 
   osc1.amp(0)
   osc2.amp(0)
-}
-
+} 
 
 function draw() {
   
@@ -46,4 +45,4 @@ background(0,0,0);
   osc2.amp(0.5)
  
   }
-  
+ 
